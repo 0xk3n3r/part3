@@ -2,6 +2,15 @@ const express = require('express')
 const app = express()
 const repl = require('repl')
 
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger)
 app.use(express.json())
 
 let persons = [
@@ -72,7 +81,9 @@ app.post('/api/persons', (request, response) => {
   const nameExists = persons.some(person => person.name === body.name);
 
   if (nameExists) {
-    return response.status(400).json({ error: 'name must be unique' });
+    return response.status(400).json({ 
+      error: 'name must be unique'
+    })
   }
 
   const person = {
@@ -91,6 +102,11 @@ app.get('/info', (request, response) => {
   const maxId = persons.length
   response.send(`Phonebook has info for ${maxId} people<br> ${new Date()}`)
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
