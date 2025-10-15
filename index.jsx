@@ -3,7 +3,14 @@ const app = express()
 const repl = require('repl')
 const morgan = require('morgan')
 
-app.use(morgan('tiny'));
+// Custom morgan token to log request body
+morgan.token('body', (req) =>
+  {if (req.method === 'POST' || req.method === 'PUT')
+    {return JSON.stringify(req.body)}
+    return ''
+  })
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
