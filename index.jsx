@@ -1,7 +1,9 @@
 const express = require('express')
 const app = express()
 const repl = require('repl')
+const morgan = require('morgan')
 
+app.use(morgan('tiny'));
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
