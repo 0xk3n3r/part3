@@ -69,6 +69,12 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
+  const nameExists = persons.some(person => person.name === body.name);
+
+  if (nameExists) {
+    return response.status(400).json({ error: 'name must be unique' });
+  }
+
   const person = {
     id: generateId(),
     name: body.name,
@@ -80,6 +86,12 @@ app.post('/api/persons', (request, response) => {
 
   response.json(person)
 })
+
+app.get('/info', (request, response) => {
+  const maxId = persons.length
+  response.send(`Phonebook has info for ${maxId} people<br> ${new Date()}`)
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
