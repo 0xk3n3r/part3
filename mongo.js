@@ -19,10 +19,9 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-const person = new Person({
-    name: "Arto Hellas",
-    number: "040-123456"
-})
+const name = process.argv[3]
+const number = process.argv[4]
+const person = new Person({ name, number })
 
 /*
 Note.find({}).then(result => {
@@ -34,6 +33,6 @@ Note.find({}).then(result => {
 */
 
 person.save().then(result => {
-  console.log('person saved!')
+  console.log(`Added ${name} number ${number} to phonebook`)
   mongoose.connection.close()
 })
