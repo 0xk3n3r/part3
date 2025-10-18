@@ -26,6 +26,33 @@ const requestLogger = (request, response, next) => {
 app.use(requestLogger)
 app.use(express.json())
 
+
+const mongoose = require('mongoose')
+
+const password = 911225
+
+// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
+const url =
+  `mongodb+srv://adminer:${password}@cluster0.zffjt2e.mongodb.net/personApp?retryWrites=true&w=majority&appName=Cluster0`
+
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+const Person = mongoose.model('Person', personSchema)
+
+personSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+/*
 let persons = [
     {
       "id": 1,
@@ -48,13 +75,16 @@ let persons = [
       "number": "39-23-6423122"
     }
   ]
+*/
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
