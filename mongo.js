@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const url =
-  `mongodb+srv://adminer:911225@cluster0.zffjt2e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+  `mongodb+srv://adminer:911225@cluster0.zffjt2e.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery',false)
 
