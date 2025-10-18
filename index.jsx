@@ -6,6 +6,7 @@ const repl = require('repl')
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
+const person = require('./models/person')
 app.use(cors())
 
 // Custom morgan token to log request body
@@ -31,7 +32,7 @@ app.use(express.json())
 /*
 const mongoose = require('mongoose')
 
-const password = 911225
+const password = 
 
 // DO NOT SAVE YOUR PASSWORD TO GITHUB!!
 const url =
@@ -80,10 +81,12 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  response.status(204).end()
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
+  }).catch(error => {
+    console.error('Error fetching data:', error)
+    response.status(404).end()
+  })
 })
 
 const generateId = () => {
@@ -110,16 +113,15 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const person = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-    date: new Date()
-  }
+  })
+  
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 
-  persons = persons.concat(person)
-
-  response.json(person)
 })
 
 app.get('/info', (request, response) => {
