@@ -1,9 +1,11 @@
+require('dotenv').config()
+const PORT = process.env.PORT
 const express = require('express')
 const app = express()
 const repl = require('repl')
 const morgan = require('morgan')
 const cors = require('cors')
-
+const Person = require('./models/person')
 app.use(cors())
 
 // Custom morgan token to log request body
@@ -26,7 +28,7 @@ const requestLogger = (request, response, next) => {
 app.use(requestLogger)
 app.use(express.json())
 
-
+/*
 const mongoose = require('mongoose')
 
 const password = 911225
@@ -52,30 +54,9 @@ personSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
-/*
-let persons = [
-    {
-      "id": 1,
-      "name": "Arto Hellas",
-      "number": "040-123456"
-    },
-    {
-      "id": 2,
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523"
-    },
-    {
-      "id": 3,
-      "name": "Dan Abramov",
-      "number": "12-43-234345"
-    },
-    {
-      "id": 4,
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122"
-    }
-  ]
 */
+
+let persons = [   ]
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -151,7 +132,6 @@ const unknownEndpoint = (request, response) => {
 }
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
