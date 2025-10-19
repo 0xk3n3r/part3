@@ -6,7 +6,6 @@ const repl = require('repl')
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
-const person = require('./models/person')
 app.use(cors())
 
 // Custom morgan token to log request body
@@ -25,9 +24,8 @@ const requestLogger = (request, response, next) => {
   console.log('---')
   next()
 }
-
-app.use(requestLogger)
 app.use(express.json())
+app.use(requestLogger)
 
 /*
 const mongoose = require('mongoose')
@@ -84,13 +82,27 @@ app.get('/api/persons/:id', (request, response) => {
     })
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
 app.delete('/api/persons/:id', (request, response) => {
-  Person.findById(request.params.id).then(person => {
-    response.json(person)
-  }).catch(error => {
-    console.error('Error fetching data:', error)
-    response.status(404).end()
-  })
+  Person.findByIdAndDelete(request.params.id)
+  .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 const generateId = () => {
