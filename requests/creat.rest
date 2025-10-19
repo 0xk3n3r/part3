@@ -18,15 +18,15 @@ content-type: application/json
 
 {
     "name": "Arto Hellas",
-    "number": "234-567-8901"
+    "number": "234-567-890"
 }
 
 ###
-PUT http://localhost:3001/api/persons/68f41386003e8f69c9e34020 HTTP/1.1
+PUT http://localhost:3001/api/persons/68f568930a75ff6d64c9ecf0 HTTP/1.1
 content-type: application/json
 
 {   
-    "name": "Arto Hellas",
+    "name": "Arto Hellas2",
     "number": "234-567-8966"
 }
 
