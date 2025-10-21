@@ -1,7 +1,7 @@
+const morgan = require('morgan')
 const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', false)
-
 
 const url = process.env.MONGODB_URI
 const phoneRegex = /^\d{3}-\d{3}-\d{4}$/
